@@ -1,5 +1,5 @@
 import os
-import exceptiongroup
+# import exceptiongroup
 from planning.classic_based.Process import Process
 from typing import List
 from planning.classic_based.LinkList import LinkList
@@ -30,13 +30,13 @@ class Preparation:
 
     def Initialize(self, input_str = ""):
         string = ""
-        try:
-            if(input_str == ""):
-                string = self.ReadFromFile()
-            else:
-                string = input_str.splitlines()
-        except exceptiongroup as ex:
-            print("can not read from file. exception occured.")
+        # try:
+        if(input_str == ""):
+            string = self.ReadFromFile()
+        else:
+            string = input_str.splitlines()
+        # except exceptiongroup as ex:
+        #     print("can not read from file. exception occured.")
         tmp_points : List[Point] = []
         parts = string
         self.Source.x = int(parts[0])

@@ -29,7 +29,7 @@ def pixels_to_meters(pixels):
     return meters
 
 def pixels_to_centimeters_calibrated(pixels):
-    return pixels * 18 / 120 # 70 pixel = 18 cm
+    return pixels #* 18 / 120 # 70 pixel = 18 cm
 
 def callback2(data): #MRR whitout flight command
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
@@ -78,8 +78,8 @@ def callback2(data): #MRR whitout flight command
         # mc.forward(distance_m=dist, velocity=velocity)
         pre_angle = degree
 
-        print('Sleep for 2 seconds')
-        time.sleep(2)
+        # print('Sleep for 2 seconds')
+        # time.sleep(2)
 
     print('Landing!')
 
@@ -96,8 +96,8 @@ def callback(data): #MRR
         # We take off when the commander is created
         with MotionCommander(scf) as mc:
             print('Taking off!')
-            print('Sleep for 5 seconds!')
-            time.sleep(5)
+            print('Sleep for 3 seconds!')
+            time.sleep(3)
             rate = 10
             velocity = 0.5
             pre_angle = 0
@@ -125,8 +125,8 @@ def callback(data): #MRR
                 mc.forward(distance_m=dist, velocity=velocity)
                 pre_angle = degree
 
-                print('Sleep for 1 seconds')
-                time.sleep(1)
+                # print('Sleep for 1 seconds')
+                # time.sleep(1)
 
             print('Landing!')
 
