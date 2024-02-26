@@ -1,0 +1,614 @@
+------------------- figure 1 HYB -----------------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (36, 90) (49, 81)
+Obstacle 2: (68, 71) (57, 68)
+Obstacle 3: (75, 21) (90, 26)
+Obstacle 4: (52, 13) (11, 41)
+Path:
+Step 1: (5, 19)
+Step 2: (34, 8)
+Step 3: (51, 7)
+Step 4: (58, 10)
+Step 5: (63, 17)
+Step 6: (76, 55)
+Step 7: (83, 85)
+Start Point: (5, 19)
+Target Point: (83, 87)
+------------ figure 1 classic -------------------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (36, 90) (49, 81)
+Obstacle 2: (68, 71) (57, 68)
+Obstacle 3: (75, 21) (90, 26)
+Obstacle 4: (52, 13) (11, 41)
+Path:
+Step 1: (5, 19)
+Step 2: (27, 11)
+Step 3: (52, 13)
+Step 4: (67, 17)
+Step 5: (80, 27)
+Step 6: (88, 41)
+Step 7: (92, 56)
+Step 8: (90, 72)
+Step 9: (83, 87)
+Start Point: (5, 19)
+Target Point: (83, 87)
+---------------- test file figure 1 -------------------------
+5
+19
+36
+90
+49
+81
+ring
+68
+71
+57
+68
+ring
+75
+21
+90
+26
+ring
+52
+13
+11
+41
+ring
+target
+83
+87
+END
+-----------------
+----------tables content ------------------------------
+------------case 1 -------------------------------
+---- test file -----------------
+6
+14
+26
+100
+26
+85
+ring
+58
+66
+55
+59
+ring
+76
+27
+89
+21
+ring
+59
+14
+11
+43
+ring
+target
+84
+83
+END
+----------- HYB--------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (26, 100) (26, 85)
+Obstacle 2: (58, 66) (55, 59)
+Obstacle 3: (76, 27) (89, 21)
+Obstacle 4: (59, 14) (11, 43)
+Path:
+Step 1: (6, 14)
+Step 2: (34, 3)
+Step 3: (52, 5)
+Step 4: (59, 9)
+Step 5: (66, 23)
+Step 6: (78, 54)
+Step 7: (84, 80)
+Start Point: (6, 14)
+Target Point: (84, 83)
+
+---------- data ----------
+min dist = 5.0
+average = 24.2738
+
+--------- Classic --------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (26, 100) (26, 85)
+Obstacle 2: (58, 66) (55, 59)
+Obstacle 3: (76, 27) (89, 21)
+Obstacle 4: (59, 14) (11, 43)
+Path:
+Step 1: (6, 14)
+Step 2: (59, 14)
+Step 3: (74, 14)
+Step 4: (89, 21)
+Step 5: (98, 27)
+Step 6: (105, 36)
+Step 7: (108, 47)
+Step 8: (107, 59)
+Step 9: (102, 69)
+Step 10: (94, 78)
+Step 11: (84, 83)
+Start Point: (6, 14)
+Target Point: (84, 83)
+
+---------- data ----------
+min dist = 0.0001
+average = 22.2747
+
+------------case 2 -------------------------------
+---- test file -----------
+----------- HYB--------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (43, 98) (25, 80)
+Obstacle 2: (57, 71) (64, 72)
+Obstacle 3: (89, 25) (75, 24)
+Obstacle 4: (56, 19) (15, 47)
+Path:
+Step 1: (4, 19)
+Step 2: (32, 10)
+Step 3: (52, 7)
+Step 4: (61, 10)
+Step 5: (67, 17)
+Step 6: (84, 56)
+Step 7: (90, 89)
+Start Point: (4, 19)
+Target Point: (91, 90)
+
+---------- data ----------
+min dist = 10.2956
+average = 23.5981
+
+--------- Classic --------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (43, 98) (25, 80)
+Obstacle 2: (57, 71) (64, 72)
+Obstacle 3: (89, 25) (75, 24)
+Obstacle 4: (56, 19) (15, 47)
+Path:
+Step 1: (4, 19)
+Step 2: (30, 14)
+Step 3: (56, 19)
+Step 4: (72, 26)
+Step 5: (85, 38)
+Step 6: (93, 54)
+Step 7: (95, 72)
+Step 8: (91, 90)
+Start Point: (4, 19)
+Target Point: (91, 90)
+
+---------- data ----------
+min dist = 0.0001
+average = 20.8169
+
+------------case 3 -------------------------------
+---- test file -----------
+1
+19
+27
+99
+49
+87
+ring
+59
+55
+73
+75
+ring
+87
+21
+81
+28
+ring
+54
+13
+15
+47
+ring
+target
+89
+82
+END
+
+----------- HYB--------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (27, 99) (49, 87)
+Obstacle 2: (59, 55) (73, 75)
+Obstacle 3: (87, 21) (81, 28)
+Obstacle 4: (54, 13) (15, 47)
+Path:
+Step 1: (1, 19)
+Step 2: (33, 5)
+Step 3: (51, 5)
+Step 4: (58, 9)
+Step 5: (68, 23)
+Step 6: (83, 55)
+Step 7: (89, 80)
+Start Point: (1, 19)
+Target Point: (89, 82)
+
+---------- data ----------
+min dist = 5.6569
+average = 19.239
+
+--------- Classic --------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (27, 99) (49, 87)
+Obstacle 2: (59, 55) (73, 75)
+Obstacle 3: (87, 21) (81, 28)
+Obstacle 4: (54, 13) (15, 47)
+Path:
+Step 1: (1, 19)
+Step 2: (26, 11)
+Step 3: (54, 13)
+Step 4: (70, 19)
+Step 5: (82, 31)
+Step 6: (90, 47)
+Step 7: (92, 64)
+Step 8: (89, 82)
+Start Point: (1, 19)
+Target Point: (89, 82)
+
+---------- data ----------
+min dist = 0.0001
+average = 15.2345
+
+------------case 4 -------------------------------
+---- test file -----------
+9
+18
+38
+95
+45
+82
+ring
+73
+65
+63
+50
+ring
+75
+25
+78
+27
+ring
+53
+20
+16
+47
+ring
+target
+85
+87
+END
+
+----------- HYB--------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (38, 95) (45, 82)
+Obstacle 2: (73, 65) (63, 50)
+Obstacle 3: (75, 25) (78, 27)
+Obstacle 4: (53, 20) (16, 47)
+Path:
+Step 1: (9, 18)
+Step 2: (36, 7)
+Step 3: (53, 6)
+Step 4: (60, 9)
+Step 5: (65, 16)
+Step 6: (78, 54)
+Step 7: (85, 85)
+Start Point: (9, 18)
+Target Point: (85, 87)
+
+---------- data ----------
+min dist = 10.262
+average = 19.1193
+
+--------- Classic --------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (38, 95) (45, 82)
+Obstacle 2: (73, 65) (63, 50)
+Obstacle 3: (75, 25) (78, 27)
+Obstacle 4: (53, 20) (16, 47)
+Path:
+Step 1: (9, 18)
+Step 2: (23, 13)
+Step 3: (38, 14)
+Step 4: (53, 20)
+Step 5: (69, 31)
+Step 6: (81, 47)
+Step 7: (86, 67)
+Step 8: (85, 87)
+Start Point: (9, 18)
+Target Point: (85, 87)
+
+---------- data ----------
+min dist = 0.0001
+average = 15.4874
+
+-------------------------------------------- RUNTIME ----------------------------------------------
+---------------- test 1 --------------------
+---------------- HYB -----------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (44, 100) (35, 97)
+Obstacle 2: (68, 72) (55, 70)
+Obstacle 3: (91, 23) (78, 30)
+Obstacle 4: (59, 15) (12, 47)
+Path:
+Step 1: (11, 6)
+Step 2: (31, 7)
+Step 3: (53, 7)
+Step 4: (63, 12)
+Step 5: (70, 21)
+Step 6: (82, 64)
+Step 7: (85, 97)
+Start Point: (11, 6)
+Target Point: (85, 98)
+episode_reward:1.384141538274071 
+(Hybrid) => Runtime is:  6.936788558959961 milliseconds
+
+-------------- Classic ----------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (44, 100) (35, 97)
+Obstacle 2: (68, 72) (55, 70)
+Obstacle 3: (91, 23) (78, 30)
+Obstacle 4: (59, 15) (12, 47)
+Path:
+Step 1: (11, 6)
+Step 2: (27, 3)
+Step 3: (44, 6)
+Step 4: (59, 15)
+Step 5: (76, 30)
+Step 6: (87, 51)
+Step 7: (90, 75)
+Step 8: (85, 98)
+Start Point: (11, 6)
+Target Point: (85, 98)
+(Classic) => Runtime is:  734.5371246337891 milliseconds
+------------ test file 1 --------------------------
+11
+6
+44
+100
+35
+97
+ring
+68
+72
+55
+70
+ring
+91
+23
+78
+30
+ring
+59
+15
+12
+47
+ring
+target
+85
+98
+END
+---------------------- test 2 --------------------
+----------------- HYB ---------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (46, 84) (27, 93)
+Obstacle 2: (72, 74) (63, 62)
+Obstacle 3: (82, 22) (80, 26)
+Obstacle 4: (54, 14) (16, 48)
+Path:
+Step 1: (17, 15)
+Step 2: (37, 10)
+Step 3: (55, 9)
+Step 4: (64, 13)
+Step 5: (71, 22)
+Step 6: (88, 60)
+Step 7: (92, 91)
+Start Point: (17, 15)
+Target Point: (93, 92)
+episode_reward:1.3671770478534673 
+(Hybrid) => Runtime is:  6.577968597412109 milliseconds
+----------------- Classic ----------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (46, 84) (27, 93)
+Obstacle 2: (72, 74) (63, 62)
+Obstacle 3: (82, 22) (80, 26)
+Obstacle 4: (54, 14) (16, 48)
+Path:
+Step 1: (17, 15)
+Step 2: (35, 11)
+Step 3: (54, 14)
+Step 4: (72, 21)
+Step 5: (86, 35)
+Step 6: (95, 53)
+Step 7: (97, 72)
+Step 8: (93, 92)
+Start Point: (17, 15)
+Target Point: (93, 92)
+(Classic) => Runtime is:  695.7249641418457 milliseconds
+
+------------------------- test file 2 --------------
+17
+15
+46
+84
+27
+93
+ring
+72
+74
+63
+62
+ring
+82
+22
+80
+26
+ring
+54
+14
+16
+48
+ring
+target
+93
+92
+END
+
+----------------------------------test 3 -----------------------------------------------
+---------------------- HYB -----------------------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (35, 95) (33, 95)
+Obstacle 2: (72, 74) (50, 69)
+Obstacle 3: (91, 25) (97, 27)
+Obstacle 4: (58, 16) (17, 43)
+Path:
+Step 1: (8, 5)
+Step 2: (31, 7)
+Step 3: (50, 9)
+Step 4: (63, 18)
+Step 5: (85, 54)
+Step 6: (95, 91)
+Step 7: (96, 98)
+Start Point: (8, 5)
+Target Point: (99, 100)
+episode_reward:1.4568433798748321 
+(Hybrid) => Runtime is:  7.568359375 milliseconds
+
+------------------ Classic -----------------------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (35, 95) (33, 95)
+Obstacle 2: (72, 74) (50, 69)
+Obstacle 3: (91, 25) (97, 27)
+Obstacle 4: (58, 16) (17, 43)
+Path:
+Step 1: (8, 5)
+Step 2: (25, 2)
+Step 3: (42, 6)
+Step 4: (58, 16)
+Step 5: (81, 38)
+Step 6: (95, 67)
+Step 7: (99, 100)
+Start Point: (8, 5)
+Target Point: (99, 100)
+(Classic) => Runtime is:  720.0057506561279 milliseconds
+
+------------------------ test file 3 -----------------------------------------
+8
+5
+35
+95
+33
+95
+ring
+72
+74
+50
+69
+ring
+91
+25
+97
+27
+ring
+58
+16
+17
+43
+ring
+target
+99
+100
+END
+---------------------------------- test 4 -----------------------------------------
+------------------------- HYB -----------------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (46, 87) (30, 91)
+Obstacle 2: (53, 56) (69, 72)
+Obstacle 3: (97, 22) (93, 27)
+Obstacle 4: (53, 12) (16, 46)
+Path:
+Step 1: (16, 5)
+Step 2: (33, 6)
+Step 3: (54, 7)
+Step 4: (65, 14)
+Step 5: (76, 32)
+Step 6: (92, 71)
+Step 7: (93, 95)
+Start Point: (16, 5)
+Target Point: (94, 97)
+episode_reward:1.4249550619293343 
+(Hybrid) => Runtime is:  8.995771408081055 milliseconds
+
+-------------------- Classic ---------------------------------
+Width: 100, Height: 100
+Obstacles:
+Obstacle 1: (46, 87) (30, 91)
+Obstacle 2: (53, 56) (69, 72)
+Obstacle 3: (97, 22) (93, 27)
+Obstacle 4: (53, 12) (16, 46)
+Path:
+Step 1: (16, 5)
+Step 2: (28, 2)
+Step 3: (41, 5)
+Step 4: (53, 12)
+Step 5: (76, 34)
+Step 6: (90, 64)
+Step 7: (94, 97)
+Start Point: (16, 5)
+Target Point: (94, 97)
+(Classic) => Runtime is:  705.3594589233398 milliseconds
+
+-------------------- test file 4 -------------------------
+16
+5
+46
+87
+30
+91
+ring
+53
+56
+69
+72
+ring
+97
+22
+93
+27
+ring
+53
+12
+16
+46
+ring
+target
+94
+97
+END
+
+
+
+
+
+
+
+
