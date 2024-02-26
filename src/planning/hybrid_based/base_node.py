@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument("--using_guidance", type=bool, default=False, help="using guidance?")
     parser.add_argument("--check_safty", type=bool, default=False, help="check safty?")
     parser.add_argument("--absolute_dir", type=str, default="/home/mohammad/catkin_ws/src/moving_agent/src/planning/hybrid_based/PPO_Continues", help="absolute direction")
-    parser.add_argument("--run_classic_approach", type=bool, default=True, help="Do you want to run the classic approach?")
+    parser.add_argument("--run_classic_approach", type=bool, default=False, help="Do you want to run the classic approach?")
 
     args = parser.parse_args()
 
