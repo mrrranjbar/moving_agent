@@ -7,7 +7,7 @@ from PPO_Continues.normalization import Normalization, RewardScaling
 from PPO_Continues.replaybuffer import ReplayBuffer
 from PPO_Continues.ppo_continuous import PPO_continuous
 
-import wandb
+# import wandb
 
 from env import CustomEnv
 
@@ -57,7 +57,7 @@ class Base_PPO():
 
 
     def main(self, args, env_name, number, seed):
-        wandb.init(project='rl_ppo_crazyflie', entity='mrr-ranjbar')
+        # wandb.init(project='rl_ppo_crazyflie', entity='mrr-ranjbar')
         actor_path = args.absolute_dir + '/model/actor_model.pth'  # Specify the paths where you want to save the models
         critic_path = args.absolute_dir + '/model/critic_model.pth'
         
@@ -161,7 +161,7 @@ class Base_PPO():
                 total_steps += 1
 
                 #wandb
-                wandb.log({"reward": r})
+                # wandb.log({"reward": r})
 
                 # When the number of transitions in buffer reaches batch_size,then update
                 if replay_buffer.count == args.batch_size:

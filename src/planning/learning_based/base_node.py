@@ -4,8 +4,8 @@ import argparse
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("Hyperparameters Setting for PPO-continuous")
-    parser.add_argument("--max_train_steps", type=int, default=int(5000), help=" Maximum number of training steps") # 3e6 => MRR: 5000
-    parser.add_argument("--evaluate_freq", type=float, default=5000, help="Evaluate the policy every 'evaluate_freq' steps") # 5e3 => MRR: 5000
+    parser.add_argument("--max_train_steps", type=int, default=int(3e6), help=" Maximum number of training steps") # 3e6 => MRR: 5000
+    parser.add_argument("--evaluate_freq", type=float, default=1e5, help="Evaluate the policy every 'evaluate_freq' steps") # 5e3 => MRR: 5000
     parser.add_argument("--save_freq", type=int, default=20, help="Save frequency") # not using
     parser.add_argument("--policy_dist", type=str, default="Gaussian", help="Beta or Gaussian")
     parser.add_argument("--batch_size", type=int, default=512, help="Batch size") #2048 => MRR:512
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument("--epsilon", type=float, default=0.2, help="PPO clip parameter")
     parser.add_argument("--K_epochs", type=int, default=10, help="PPO parameter")
     parser.add_argument("--use_adv_norm", type=bool, default=True, help="Trick 1:advantage normalization")
-    parser.add_argument("--use_state_norm", type=bool, default=True, help="Trick 2:state normalization")
+    parser.add_argument("--use_state_norm", type=bool, default=False, help="Trick 2:state normalization")
     parser.add_argument("--use_reward_norm", type=bool, default=False, help="Trick 3:reward normalization")
     parser.add_argument("--use_reward_scaling", type=bool, default=True, help="Trick 4:reward scaling")
     parser.add_argument("--entropy_coef", type=float, default=0.01, help="Trick 5: policy entropy")
@@ -28,9 +28,9 @@ if __name__ == '__main__':
     parser.add_argument("--set_adam_eps", type=float, default=True, help="Trick 9: set Adam epsilon=1e-5")
     parser.add_argument("--use_tanh", type=float, default=True, help="Trick 10: tanh activation function")
     parser.add_argument("--is_run_mode", type=bool, default=False, help="is run mode = Flase means that the mode is Training")
-    parser.add_argument("--state_dim", type=int, default=1, help="state dimention")
-    parser.add_argument("--action_dim", type=int, default=1, help="action dimention")
-    parser.add_argument("--max_episode_steps", type=int, default=512, help="maximum episode steps")
+    parser.add_argument("--state_dim", type=int, default=5, help="state dimention")
+    parser.add_argument("--action_dim", type=int, default=3, help="action dimention")
+    parser.add_argument("--max_episode_steps", type=int, default=2048, help="maximum episode steps")
     parser.add_argument("--max_action_value", type=float, default=0.5, help="maximum action value")
     parser.add_argument("--using_guidance", type=bool, default=False, help="using guidance?")
     parser.add_argument("--check_safty", type=bool, default=False, help="check safty?")
