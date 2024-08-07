@@ -49,6 +49,7 @@ class Base_PPO():
             else:
                 action = a
             s_, r, done, _ = env.step(action)
+            print("Current state:", s_)
             episode_reward += r
             s = s_
         s = env.reset() # just for refreshing the simulator
@@ -89,6 +90,10 @@ class Base_PPO():
 
         replay_buffer = ReplayBuffer(args)
         agent = PPO_continuous(args)
+        if args.is_transform_training:
+            agent.load_models(actor_path, critic_path)
+            print("Trained model is LOADED!!!")
+        
 
         # Build a tensorboard
         writer = SummaryWriter(log_dir= args.absolute_dir + '/runs/PPO_continuous/env_{}_{}_number_{}_seed_{}'.format(env_name, args.policy_dist, number, seed))
@@ -133,6 +138,7 @@ class Base_PPO():
                     else:
                         action = a
                 s_, r, done, _ = env.step(action)
+                print("Current state:", s_)
                 if args.check_safty:
                     is_agent_in_safe_area, direc = env.is_safe_area(s_)
                     is_agent_in_alarm_area = not is_agent_in_safe_area
@@ -173,11 +179,11 @@ class Base_PPO():
 
                 # Evaluate the policy every 'evaluate_freq' steps
                 if total_steps % args.evaluate_freq == 0:
-                    evaluate_num += 1
-                    evaluate_reward = self.evaluate_policy(args, env, agent, state_norm)
-                    evaluate_rewards.append(evaluate_reward)
-                    print("evaluate_num:{} \t evaluate_reward:{} \t".format(evaluate_num, evaluate_reward))
-                    writer.add_scalar('step_rewards_{}'.format(env_name), evaluate_rewards[-1], global_step=total_steps)
+                    # evaluate_num += 1
+                    # evaluate_reward = self.evaluate_policy(args, env, agent, state_norm)
+                    # evaluate_rewards.append(evaluate_reward)
+                    # print("evaluate_num:{} \t evaluate_reward:{} \t".format(evaluate_num, evaluate_reward))
+                    # writer.add_scalar('step_rewards_{}'.format(env_name), evaluate_rewards[-1], global_step=total_steps)
                     # Save the rewards MRR
                     import os
                     file_path = args.absolute_dir + '/data_train/PPO_continuous_{}_env_{}_number_{}_seed_{}.npy'.format(args.policy_dist, env_name, number, seed)

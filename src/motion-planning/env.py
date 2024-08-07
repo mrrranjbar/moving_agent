@@ -4,6 +4,7 @@ from std_msgs.msg import String
 from std_srvs.srv import Empty
 import json
 import math 
+import random
 
 import numpy as np
 
@@ -17,7 +18,7 @@ class CustomEnv:
         self.max_action_value = max_action_value
         self.velocity = velocity
         self.wheel_base_length = wheel_base_length
-        self.dt = 0.1  # time step in seconds
+        self.dt = 0.05  # time step in seconds
         self.timestep = 32
         self.ANGULAR_VELOCITY_COEF = 5
         # Initialize orientation
@@ -36,9 +37,10 @@ class CustomEnv:
         self.z = 0
         self.Width = 8.0
         self.Height = 8.0
-        self.diometer_of_env = math.sqrt(self.Width * self.Width + self.Height * self.Height) 
+        self.diometer_of_env = self.Width # math.sqrt(self.Width * self.Width + self.Height * self.Height) 
         # self.dist_limit = 3.0
         self.dist = self.Width - 1
+        self.pre_dist = self.Width - 1
         rospy.init_node('CustomEnv', anonymous=True)
         rospy.Subscriber("string_message", String, self.callback)
         rospy.wait_for_service('reload_world_service')
@@ -47,11 +49,12 @@ class CustomEnv:
         self.alarm_area_limit = 0.5
         self.max_distance_from_obstacle = 2000
         self.OUT_OF_ENVIRONMENT = -2
-        self.GOAL = 2
-        self.ANGLE_ERROR_ZERO = 1
+        self.GOAL = 3
+        self.ANGLE_ERROR_ZERO = 0.5
         self.HAS_INTERSECTION = -2
         self.MAX_EPISODE_STEP = -2
         self.angle_error = 0 #self.calculate_angle_error()
+        self.pre_angle_error = 0
         self.is_first_state_info_arrived = False
 
     def callback(self, data):
@@ -100,7 +103,7 @@ class CustomEnv:
             rospy.loginfo("The drone has intersection!")
             r = self.HAS_INTERSECTION
             done = True
-            print("reward: ", r)
+            # print("reward: ", r)
             return s_, r, done, {}
         
         # elif self.x > self.Width or self.x < -self.Width or self.y > self.Height or self.y < -self.Height:
@@ -111,19 +114,19 @@ class CustomEnv:
         
         elif self.current_step >= self.max_episode_steps:
             rospy.loginfo("Max Episode Steps is happened!")
-            r = self.MAX_EPISODE_STEP
+            # r = self.MAX_EPISODE_STEP
             done = True
-            print("reward: ", r)
+            # print("reward: ", r)
             return s_, r, done, {}
         
-        elif self.tx - 0.2 < self.x and self.x < self.tx + 0.2 and self.ty - 0.2 < self.y and self.y < self.ty + 0.2:
+        elif self.tx - 0.3 < self.x and self.x < self.tx + 0.3 and self.ty - 0.3 < self.y and self.y < self.ty + 0.3:
             rospy.loginfo("GOAL!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            r = self.GOAL
+            # r = self.GOAL
             done = True
-            print("reward: ", r)
+            # print("reward: ", r)
             return s_, r, done, {}
         
-        print("reward: ", r)
+        # print("reward: ", r)
 
         return s_, r, done, {}  # Return a dictionary for any additional info you want to pass
     
@@ -144,7 +147,7 @@ class CustomEnv:
         vyaw = action[0] #(-1,1)
         # vyaw *= self.ANGULAR_VELOCITY_COEF
         vyaw = ((vyaw + 1) / 2) * (self.max_action_value + self.max_action_value) - self.max_action_value # (-max_action_value, max_action_value)
-        print("angular velocity: ", vyaw)
+        # print("angular velocity: ", vyaw)
         # self.orientation += vyaw * self.dt
 
         # Constrain orientation angle to ensure vx remains positive and not zero
@@ -155,7 +158,7 @@ class CustomEnv:
         #     self.orientation = -math.pi / 2 + 0.01  # slightly more than -pi/2
 
         vx = self.velocity
-        print("linear velocity: ", vx)
+        # print("linear velocity: ", vx)
         vy = 0
         # vx = self.velocity * math.cos(self.orientation)
         # vy = self.velocity * math.sin(self.orientation)
@@ -195,60 +198,90 @@ class CustomEnv:
         angle_error = abs(angle_diff)
 
 
-        print("angle error: ", angle_error)
+        # print("angle error: ", angle_error)
         
         return angle_error
     
+    def exponential_func(self, x, c, k, w):
+        res = c * np.exp(-k * x)
+        # res = c * math.pow(1.0 / math.e , k * x) # f(x) = c . (1 / e) ^ (k.x) 
+        return res # self.min_max_scale(res, 0, c) * w # output is [0 , w]
+    
+    def tanh_func(self, x, w1, w2):
+        res = self.min_max_scale(x, 0, 2000) * w1 # output is [0, w1]
+        return math.tanh(res) * w2 # res >= 0 so output is [0, w2] 
+    
     def get_reward(self):
-        # temp_coef = 1 if self.front <= 10 else self.front
-        # inverse_distance_for_front = (1.0 / temp_coef) * self.max_distance_from_obstacle
-        # inverse_distance_for_front = 0 if inverse_distance_for_front == 1 else inverse_distance_for_front
+        # w_dist_from_target = 1
+        # min_dist = 0.3
+        # w_angle_error_agent_target = 1.5
+        # w_range_left = 0.1
+        # w_range_right = 0.1
+        # w_range_front= 0.1
+        # w_range_back = 0.1
+        # k = np.log(100) / 4 # dist=[0, 4]
+        # c = 2 / np.exp(-k * min_dist) # f = [0, 2]
+        # if self.dist < self.Width / 4:
+        #     reward_dist_from_target = self.exponential_func(x = self.dist, c = c, k = k, w = w_dist_from_target)
+        # else:
+        #     reward_dist_from_target = 0
+        # angle_error_agent_target = self.exponential_func(x = self.angle_error, c = 15, k = 1, w = w_angle_error_agent_target)
+        # range_left = self.tanh_func(self.left, w1 = 3, w2 = w_range_left) 
+        # range_right = self.tanh_func(self.right, w1 = 3, w2 = w_range_right)
+        # range_front = self.tanh_func(self.front, w1 = 3, w2 = w_range_front)
+        # range_back = self.tanh_func(self.back, w1 = 3, w2 = w_range_back)
+        # r = (reward_dist_from_target + range_left + range_right + range_front + range_back) / (w_dist_from_target + w_range_left + w_range_right + w_range_front + w_range_back)
+        # r = reward_dist_from_target
+        # r -= 0.001 * self.current_step
+        # if self.dist < 1 and  self.dist > 0.8:
+        #     r += 0.4
+        # elif self.dist <= 0.8 and self.dist > 0.5:
+        #     r += 0.6
+        # elif self.dist <= 0.5 and self.dist > 0.3:
+        #     r += 0.8
+        # if self.angle_error < 0.05: # < 3 degrees
+        #     r += self.ANGLE_ERROR_ZERO
 
-        # temp_coef = 1 if self.back <= 10 else self.back
-        # inverse_distance_for_back = (1.0 / temp_coef) * self.max_distance_from_obstacle
-        # inverse_distance_for_back = 0 if inverse_distance_for_back == 1 else inverse_distance_for_back
+        # print("dist_from_target= ", dist_from_target)
+        # print("angle_error_agent_target= ", angle_error_agent_target)
+        # print("range_left= ", range_left)
+        # print("range_right= ", range_right)
+        # print("range_front= ", range_front)
+        # print("range_back= ", range_back)
 
-        # temp_coef = 1 if self.right <= 10 else self.right
-        # inverse_distance_for_right = (1.0 / temp_coef) * self.max_distance_from_obstacle
-        # inverse_distance_for_right = 0 if inverse_distance_for_right == 1 else inverse_distance_for_right
 
-        # temp_coef = 1 if self.left <= 10 else self.left
-        # inverse_distance_for_left = (1.0 / temp_coef) * self.max_distance_from_obstacle
-        # inverse_distance_for_left = 0 if inverse_distance_for_left == 1 else inverse_distance_for_left
+        # diff_angle_error = self.pre_angle_error - self.angle_error
+        # diff_dist = round(self.pre_dist, 2) - round(self.dist, 2)
+        # diff_angle_error = 0 if diff_angle_error > 0 else diff_angle_error
 
-        w_dist = 1.0
-        w_angle_error = 1.0
-        # w_inverse_distance_for_front = 1.0
-        # w_inverse_distance_for_back = 1.0
-        # w_inverse_distance_for_right = 1.0
-        # w_inverse_distance_for_left = 1.0
-        sum =  ( # bad reward = highest sum ------------ good reward = lowest sum
-               self.min_max_scale(self.dist, 0, self.diometer_of_env) * w_dist + 
-               self.min_max_scale(self.angle_error, 0, math.pi) * w_angle_error
-            #    self.min_max_scale(inverse_distance_for_front, 0, self.max_distance_from_obstacle) + 
-            #    self.min_max_scale(inverse_distance_for_back, 0, self.max_distance_from_obstacle) + 
-            #    self.min_max_scale(inverse_distance_for_right, 0, self.max_distance_from_obstacle) + 
-            #    self.min_max_scale(inverse_distance_for_left, 0, self.max_distance_from_obstacle)
-               )
-        # r = - (sum / (w_inverse_distance_for_front + w_inverse_distance_for_back + w_inverse_distance_for_right + w_inverse_distance_for_left + w_dist + w_angle_error))
-
-        r = - (sum / (w_dist + w_angle_error))
-
-        if self.angle_error < 0.05: # < 3 degree
-            r += self.ANGLE_ERROR_ZERO
-
-        return r
+        r = -round(self.min_max_scale(self.angle_error, 0, math.pi), 2)
+        # r = 0.1 if -0.05 <= self.angle_error <= 0.05 else diff_angle_error
+        # r = round(r, 2)
+        print("reward= ", r)
+        # print("dist= ", self.dist)
+        return r # [0, 1]
     
     def get_states(self):
-        self.dist = math.sqrt(math.pow(self.x - self.tx , 2) + math.pow(self.y - self.ty, 2))
+        # self.pre_dist = self.dist
+        # self.dist = math.sqrt(math.pow(self.x - self.tx , 2) + math.pow(self.y - self.ty, 2))
+        self.pre_angle_error = self.angle_error
         self.angle_error = self.calculate_angle_error()
         state = np.zeros(self.state_dim) 
-        state[0] = round(self.min_max_scale(self.dist, 0, self.diometer_of_env), 1)
-        state[1] = round(self.min_max_scale(self.front, 0, self.max_distance_from_obstacle), 1)
-        state[2] = round(self.min_max_scale(self.back, 0, self.max_distance_from_obstacle), 1)
-        state[3] = round(self.min_max_scale(self.right, 0, self.max_distance_from_obstacle), 1)
-        state[4] = round(self.min_max_scale(self.left, 0, self.max_distance_from_obstacle), 1)
-        state[5] = round(self.min_max_scale(self.angle_error, 0, math.pi), 1)
+        state[0] = round(self.min_max_scale(self.front, 0, self.max_distance_from_obstacle), 1)
+        state[1] = round(self.min_max_scale(self.back, 0, self.max_distance_from_obstacle), 1)
+        state[2] = round(self.min_max_scale(self.right, 0, self.max_distance_from_obstacle), 1)
+        state[3] = round(self.min_max_scale(self.left, 0, self.max_distance_from_obstacle), 1)
+        state[4] = round(self.min_max_scale(self.angle_error, 0, math.pi), 2)
+        # state[5] = round(self.min_max_scale(self.dist, 0, self.diometer_of_env), 2)
+
+        # state[0] = 1 if self.front < 250 and self.front > 100 else 0
+        # state[1] = 1 if self.back < 250 and self.back > 100 else 0
+        # state[2] = 1 if self.right < 250 and self.right > 100 else 0
+        # state[3] = 1 if self.left < 250 and self.left > 100 else 0
+        # state[4] = round(self.angle_error, 2)
+
+        # print("front:", self.front)
+        # print("Current state:", self.state[4])
         
         # note: previous trained model doese not work because of adding these new states.
         # state[6] = round(self.min_max_scale(self.x, -self.Width / 2.0, self.Width / 2.0), 1)
@@ -264,12 +297,13 @@ class CustomEnv:
 
     def reset(self):
         self.reload_world_service()
-        rospy.loginfo("waiting for drone hovering, 10 seconds")
-        rospy.sleep(10) # seconds
+        waiting_time = 8
+        rospy.loginfo(f"waiting for drone hovering, {waiting_time} seconds")
+        rospy.sleep(waiting_time) # seconds
         rospy.loginfo("Hovering is DONE!")
 
         while not self.is_first_state_info_arrived:
-            print("MRR")
+            # print("MRR")
             rospy.spin()
 
         self.current_step = 0
