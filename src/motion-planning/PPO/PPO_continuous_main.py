@@ -49,7 +49,7 @@ class Base_PPO():
             else:
                 action = a
             s_, r, done, _ = env.step(action)
-            print("Current state:", s_)
+            # print("Current state:", s_)
             episode_reward += r
             s = s_
         s = env.reset() # just for refreshing the simulator
@@ -110,7 +110,6 @@ class Base_PPO():
         
         is_first_update = True
         is_agent_in_alarm_area = False
-        direc = ""
 
         while total_steps < args.max_train_steps:
             print("NEW EPISODE!!!!!!!!")
@@ -125,7 +124,7 @@ class Base_PPO():
             while not done:
                 episode_steps += 1
                 if args.check_safty and is_agent_in_alarm_area:
-                    action, a_logprob = agent.choose_action_from_custom_controller(s, direc)
+                    action, a_logprob = agent.choose_action_from_custom_controller(s)
                 else:
                     if args.using_guidance and is_first_update:
                         a, a_logprob = agent.choose_action_for_first_update(s)
@@ -140,7 +139,7 @@ class Base_PPO():
                 s_, r, done, _ = env.step(action)
                 print("Current state:", s_)
                 if args.check_safty:
-                    is_agent_in_safe_area, direc = env.is_safe_area(s_)
+                    is_agent_in_safe_area = env.is_safe_area(s_)
                     is_agent_in_alarm_area = not is_agent_in_safe_area
                 
                 # #wandb
