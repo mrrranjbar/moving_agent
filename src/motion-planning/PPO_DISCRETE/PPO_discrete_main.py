@@ -12,6 +12,7 @@ from env import CustomEnv
 import wandb
 import os
 import json
+from datetime import datetime
 
 
 class Base_PPO_Discrete():
@@ -47,7 +48,11 @@ class Base_PPO_Discrete():
             return obj
     
     def run_model(self, args, env, agent, state_norm, actor_path, critic_path):
-        result_path = args.absolute_dir + '/result/res.txt'
+        # Get the current date and time
+        current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
+        # Build the result file path
+        result_path = os.path.join(args.absolute_dir, 'result', f'res-{current_time}.txt')
         agent.load_models(actor_path, critic_path)
         # env.load_model(grid_model_path)
         print("models are LOADED!!!")
@@ -72,13 +77,28 @@ class Base_PPO_Discrete():
                 "obs_02" : [env.obs_02_x, env.obs_02_y],
                 "obs_03" : [env.obs_03_x, env.obs_03_y],
                 "obs_04" : [env.obs_04_x, env.obs_04_y],
+                "obs_05" : [env.obs_05_x, env.obs_05_y],
+                "obs_06" : [env.obs_06_x, env.obs_06_y],
+                "obs_07" : [env.obs_07_x, env.obs_07_y],
+                "obs_08" : [env.obs_08_x, env.obs_08_y],
+                "obs_09" : [env.obs_09_x, env.obs_09_y],
+                "obs_10" : [env.obs_10_x, env.obs_10_y],
                 "agent": [env.x, env.y],
                 "current_step_un_norm" : s_un_norm.tolist(),
                 "current_step_norm" : s.tolist(),
                 "next_step_un_norm" : s_un_norm.tolist(),
                 "next_step_norm" : s.tolist(),
                 "action": -1,
-                "reward": -100
+                "reward": -100,
+                "front": env.front,
+                "left": env.left,
+                "right": env.right,
+                "yaw": env.yaw,
+                "roll": env.roll,
+                "pitch": env.pitch,
+                "v_x": env.v_x,
+                "v_y": env.v_y,
+                "yaw_rate": env.yaw_rate,
             }
             list_of_data.append(data)
             while not done:
@@ -93,13 +113,28 @@ class Base_PPO_Discrete():
                     "obs_02" : [env.obs_02_x, env.obs_02_y],
                     "obs_03" : [env.obs_03_x, env.obs_03_y],
                     "obs_04" : [env.obs_04_x, env.obs_04_y],
+                    "obs_05" : [env.obs_05_x, env.obs_05_y],
+                    "obs_06" : [env.obs_06_x, env.obs_06_y],
+                    "obs_07" : [env.obs_07_x, env.obs_07_y],
+                    "obs_08" : [env.obs_08_x, env.obs_08_y],
+                    "obs_09" : [env.obs_09_x, env.obs_09_y],
+                    "obs_10" : [env.obs_10_x, env.obs_10_y],
                     "agent": [env.x, env.y],
                     "current_step_un_norm" : s_un_norm.tolist(),
                     "current_step_norm" : s.tolist(),
                     "next_step_un_norm" : s_next_un_norm.tolist(),
                     "next_step_norm" : s_.tolist(),
                     "action": a,
-                    "reward": r
+                    "reward": r,
+                    "front": env.front,
+                    "left": env.left,
+                    "right": env.right,
+                    "yaw": env.yaw,
+                    "roll": env.roll,
+                    "pitch": env.pitch,
+                    "v_x": env.v_x,
+                    "v_y": env.v_y,
+                    "yaw_rate": env.yaw_rate,
                 }
                 list_of_data.append(data)
                 # print("Current action:", a)
@@ -130,7 +165,8 @@ class Base_PPO_Discrete():
                 # print("Agent positions saved:", agent_xy)
                 # print("Obstacle positions saved:", obstacle_xy)
                 break
-
+        
+        ss = env.reset()
         return
 
 

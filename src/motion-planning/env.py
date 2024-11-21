@@ -99,6 +99,23 @@ class CustomEnv:
         self.obs_03_y = obj['obs_03_y']
         self.obs_04_x = obj['obs_04_x']
         self.obs_04_y = obj['obs_04_y']
+        self.obs_05_x = obj['obs_05_x']
+        self.obs_05_y = obj['obs_05_y']
+        self.obs_06_x = obj['obs_06_x']
+        self.obs_06_y = obj['obs_06_y']
+        self.obs_07_x = obj['obs_07_x']
+        self.obs_07_y = obj['obs_07_y']
+        self.obs_08_x = obj['obs_08_x']
+        self.obs_08_y = obj['obs_08_y']
+        self.obs_09_x = obj['obs_09_x']
+        self.obs_09_y = obj['obs_09_y']
+        self.obs_10_x = obj['obs_10_x']
+        self.obs_10_y = obj['obs_10_y']
+        self.roll = obj['roll']
+        self.pitch = obj['pitch']
+        self.v_x = obj['v_x']
+        self.v_y = obj['v_y']
+        self.yaw_rate = obj['yaw_rate']
         # self.dt = self.timestep / 1000.0  # convert from milliseconds to seconds
         self.is_first_state_info_arrived = True
     
@@ -122,7 +139,7 @@ class CustomEnv:
         s_ = self.get_states()
 
         #### reward ######
-        r = self.get_reward(s_)
+        r = self.get_reward()
 
         # increasing current step
         self.current_step += 1
@@ -165,15 +182,15 @@ class CustomEnv:
     
     def do_actions(self, action):
         ####################### temp #######################
-        real_actions = [-1, 4, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 3, 0, 1, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-        if self.action_count < len(real_actions):
-            action = real_actions[self.action_count]
-            self.action_count += 1
-        else:
-            self.publish_desired(str(0), str(0), str(0))
-            rospy.sleep(self.dt) # seconds
-            self.is_goal = True
-            return
+        # real_actions = [-1, 4, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 3, 0, 1, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+        # if self.action_count < len(real_actions):
+        #     action = real_actions[self.action_count]
+        #     self.action_count += 1
+        # else:
+        #     self.publish_desired(str(0), str(0), str(0))
+        #     rospy.sleep(self.dt) # seconds
+        #     self.is_goal = True
+        #     return
 
         #################################################
         vyaw = 0
@@ -192,10 +209,10 @@ class CustomEnv:
         vy = 0
 
         ############################# temp (convert to real drone) ############################
-        vyaw *= 30 # degree (-24,-12,0,12,24)
+        # vyaw *= 30 # degree (-24,-12,0,12,24)
         # vyaw *= 50 # degree (-24,-12,0,12,24)
         # convert to radian
-        vyaw = math.radians(vyaw)
+        # vyaw = math.radians(vyaw)
 
         #################################################
         self.publish_desired(str(vx), str(vy), str(vyaw))
@@ -232,7 +249,7 @@ class CustomEnv:
         res = self.min_max_scale(x, 0, 2000) * w1 # output is [0, w1]
         return math.tanh(res) * w2 # res >= 0 so output is [0, w2] 
     
-    def get_reward(self, states):
+    def get_reward(self):
         # w_dist_from_target = 1
         # min_dist = 0.3
         # w_angle_error_agent_target = 1.5
@@ -302,37 +319,40 @@ class CustomEnv:
         # r_obs = round(self.min_max_scale(self.get_obs_dist(), 0, 2), 2) - 1
         # print("obs dist= ", self.get_obs_dist())
 
-        state_count = 2
-        r_grid = 0
+        # state_count = 2
+        r_grid = -self.local_grid.grid.max()
+        if self.local_grid.grid.min() == -self.local_grid.down_block_size * self.local_grid.down_block_size: # target is seen
+            r_grid = 1 - round(self.min_max_scale(self.dist, 0, self.diometer_of_env), 2) #(self.dist * 0.5) 
+
         # print("state= ", states)
-        i = state_count
-        while i < len(states):
-            # angle [-pi/2,pi/2]
-            angle_raw = states[i] 
-            i += 1
-            # distance
-            distance_raw = states[i]
-            i += 1
-            # probability
-            p = states[i] 
-            i += 1
-            if p > 0:
-                # obs_angle = 1 - (abs(angle_raw) / (math.pi / 2)) # [-pi/2, pi/2] => angle close to 0, after convert, is close to 1 in [0, 1]
-                # r_obs_raw = distance_raw - 1
-                r_obs_item = -p #* r_obs_raw #* obs_angle
-                r_grid = r_obs_item if r_obs_item < r_grid else r_grid # min
-                # print("========= obstacle =============")
-                # print("r obs", r_obs_raw)
-                # print("p", p)
-            elif p < 0:
-                # target_angle = 1 - (abs(angle_raw) / (math.pi / 2)) # [-pi/2, pi/2] => angle close to 0, after convert, is close to 1 in [0, 1]
-                r_target_raw = 1 - (distance_raw * 0.5) 
-                r_target_item = r_target_raw #* target_angle
-                r_grid = r_target_item if r_target_item > r_grid else r_grid # max
-                # print("========= target =============")
-                # print("distance = ", distance_raw)
-                # print("target angle", target_angle)
-                # print("p", p)
+        # i = state_count
+        # while i < len(states):
+        #     # angle [-pi/2,pi/2]
+        #     angle_raw = states[i] 
+        #     i += 1
+        #     # distance
+        #     distance_raw = states[i]
+        #     i += 1
+        #     # probability
+        #     p = states[i] 
+        #     i += 1
+        #     if p > 0:
+        #         # obs_angle = 1 - (abs(angle_raw) / (math.pi / 2)) # [-pi/2, pi/2] => angle close to 0, after convert, is close to 1 in [0, 1]
+        #         # r_obs_raw = distance_raw - 1
+        #         r_obs_item = -p #* r_obs_raw #* obs_angle
+        #         r_grid = r_obs_item if r_obs_item < r_grid else r_grid # min
+        #         # print("========= obstacle =============")
+        #         # print("r obs", r_obs_raw)
+        #         # print("p", p)
+        #     elif p < 0:
+        #         # target_angle = 1 - (abs(angle_raw) / (math.pi / 2)) # [-pi/2, pi/2] => angle close to 0, after convert, is close to 1 in [0, 1]
+        #         r_target_raw = 1 - (distance_raw * 0.5) 
+        #         r_target_item = r_target_raw #* target_angle
+        #         r_grid = r_target_item if r_target_item > r_grid else r_grid # max
+        #         # print("========= target =============")
+        #         # print("distance = ", distance_raw)
+        #         # print("target angle", target_angle)
+        #         # print("p", p)
 
 
         # r_grid *= 1000
@@ -378,7 +398,7 @@ class CustomEnv:
         # print("r_obstacle= ", r_d)
         # print("r dist  = ", w_dist * r_dist)
         # print("r angle = ", w_angle_error * r_angle_error)
-        # print("r grid  = ", w_grid * r_grid)
+        # print("r grid  = ", r_grid)
         # print("r       = ", r)
         # print("dist= ", self.dist)
         return r 
@@ -416,6 +436,9 @@ class CustomEnv:
         # state[1] = round(self.min_max_scale(self.back, 0, self.max_distance_from_obstacle), 1)
         self.state[0] = round(self.min_max_scale(self.angle_error, 0, math.pi), 2)
         self.state[1] = round(self.min_max_scale(self.dist, 0, self.diometer_of_env), 2)
+        for i in range(len(self.local_grid_states)):
+            self.state[i + 2] = self.local_grid_states[i]
+        # self.state = np.concatenate((self.state, self.local_grid_states))
         # half_width = self.Width / 2.0
         # half_height = self.Height / 2.0
         # x_y_diff_out = abs(half_width - abs(self.x)) if abs(half_width - abs(self.x)) <= abs(half_height - abs(self.y)) else abs(half_height - abs(self.y)) 
@@ -450,22 +473,22 @@ class CustomEnv:
         # self.state[state_index + 3] = round(self.min_max_scale(temp_data[1][1], 0, 140), 2) # distance 2
 
         
-        state_count = 2
-        local_grid_index = 0
-        while(state_count + 3 <= self.state_dim):
-            if local_grid_index < len(self.local_grid_states):
-                # angle [0 , 2 * pi]
-                self.state[state_count] = round(self.local_grid_states[local_grid_index][0], 2) 
-                state_count += 1
-                # distance [0 , 14]
-                self.state[state_count] = round(self.min_max_scale(self.local_grid_states[local_grid_index][1], 0, self.local_grid.diameter), 2)
-                state_count += 1
-                # probability [0 , 1.0]
-                self.state[state_count] = round(self.local_grid_states[local_grid_index][2], 3)
-                state_count += 1
-                local_grid_index += 1
-            else: 
-                break
+        # state_count = 2
+        # local_grid_index = 0
+        # while(state_count + 3 <= self.state_dim):
+        #     if local_grid_index < len(self.local_grid_states):
+        #         # angle [0 , 2 * pi]
+        #         self.state[state_count] = round(self.local_grid_states[local_grid_index][0], 2) 
+        #         state_count += 1
+        #         # distance [0 , 14]
+        #         self.state[state_count] = round(self.min_max_scale(self.local_grid_states[local_grid_index][1], 0, self.local_grid.diameter), 2)
+        #         state_count += 1
+        #         # probability [0 , 1.0]
+        #         self.state[state_count] = round(self.local_grid_states[local_grid_index][2], 3)
+        #         state_count += 1
+        #         local_grid_index += 1
+        #     else: 
+        #         break
         
         # self.state[state_count] = 1 if self.dist <= 1.0 else 0
 
@@ -510,7 +533,7 @@ class CustomEnv:
         # state[7] = round(self.min_max_scale(self.y, -self.Height / 2.0, self.Height / 2.0), 1)
         # state[8] = round(self.min_max_scale(self.tx, -self.Width / 2.0, self.Width / 2.0), 1)
         # state[9] = round(self.min_max_scale(self.ty, -self.Height / 2.0, self.Height / 2.0), 1)
-
+        # print(self.state)
         return self.state
     
     def min_max_scale(self, value, min_val, max_val):
